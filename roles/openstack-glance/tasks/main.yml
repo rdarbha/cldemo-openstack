@@ -18,10 +18,10 @@
   command: mysql  -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY '{{openstack.admin_password}}';"
 
 - name: fix utf8 on glance
-  command: mysql glance -e "alter table migrate_version convert to character set utf8 collate utf8_unicode_ci;"
+  command: mysql -p glance -e "alter table migrate_version convert to character set utf8 collate utf8_unicode_ci;"
 
 - name: fix utf8 on glance 2
-  command: mysql glance -e "flush privileges;"
+  command: mysql -p glance -e "flush privileges;"
 
 - name: collect users
   command: keystone {{ openstack.keystone_args }} user-list
