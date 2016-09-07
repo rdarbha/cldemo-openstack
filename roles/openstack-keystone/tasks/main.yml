@@ -100,4 +100,4 @@
 
 - name: create keystone endpoint in keystone
   command: keystone {{ openstack.keystone_args }} endpoint-create --service-id {{ _keystone_id.stdout }} --publicurl http://controller:5000/v2.0 --internalurl http://controller:5000/v2.0 --adminurl http://controller:35357/v2.0 --region regionOne
-  when: "{{_keystone_id.stdout}} not in _endpoints.stdout"
+  when: "'{{_keystone_id.stdout}}' not in _endpoints.stdout"
