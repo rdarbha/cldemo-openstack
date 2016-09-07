@@ -19,9 +19,3 @@
   become_method: sudo
   roles:
     - ifupdown
-- hosts: server02
-  user: cumulus
-  become: yes
-  become_method: sudo
-  roles:
-    - apache

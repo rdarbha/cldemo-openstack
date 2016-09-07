@@ -19,7 +19,7 @@ Quickstart: Run the demo
     sudo apt-get update
     sudo apt-get install ansible -qy
     git clone https://github.com/cumulusnetworks/cldemo-openstack
-    cd cldemo-automation-ansible
+    cd cldemo-openstack
     ansible-playbook run-demo.yml
     ssh server01
     wget 172.16.2.101
