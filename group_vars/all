@@ -90,3 +90,9 @@ interfaces:
                 ip: "172.16.4.101"
                 mask: "255.255.255.0"
                 gateway: "172.16.4.1"
+
+# openstack
+openstack:
+    admin_token: "ac014aaa2beb079192be"
+    admin_password: "CumulusLinux"
+    demo_password: "demo"

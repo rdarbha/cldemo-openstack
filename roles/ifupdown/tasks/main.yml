@@ -8,3 +8,6 @@
 - name: configure /etc/network/interfaces on the host (using legacy ifupdown)
   template: src=interfaces.j2 dest=/etc/network/interfaces
   notify: reload networking legacy
+
+- name: configure /etc/hosts on the host (using legacy ifupdown)
+  template: src=hosts.j2 dest=/etc/hosts
