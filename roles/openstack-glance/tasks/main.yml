@@ -73,7 +73,7 @@
   meta: flush_handlers
 
 - name: collect images
-  command: glance {{ openstack.keystone_args }} image-list
+  command: glance image-list
   register: _images
 
 - name: download cirros.conf
@@ -84,5 +84,5 @@
   when: "'cirros' not in _images.stdout"
 
 - name: add cirros as an image
-  command: glance {{ openstack.keystone_args }} image-create --name "cirros-0.3.3-x86_64" --file /tmp/cirros-0.3.3-x86_64-disk.img --disk-format qcow2 --container-format bare --is-public True --progress
+  command: glance image-create --name "cirros-0.3.3-x86_64" --file /tmp/cirros-0.3.3-x86_64-disk.img --disk-format qcow2 --container-format bare --is-public True --progress
   when: "'cirros' not in _images.stdout"
