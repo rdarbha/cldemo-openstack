@@ -5,6 +5,7 @@
   with_items:
     - mysql-server
     - mysql-client-5.5
+    - python-mysqldb
 
 - name: make sure mysql is running
   service: name=mysql state=started
