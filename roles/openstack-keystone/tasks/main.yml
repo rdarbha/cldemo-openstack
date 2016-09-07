@@ -53,7 +53,7 @@
 
 
 - name: create service tenant in keystone
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 tenant-create --name service --description "Service Tenant" --os-token '{{openstack.admin_token}}'
+  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 tenant-create --name service --description "Service Tenant"
 
 
 # Add service entity and endpoints
