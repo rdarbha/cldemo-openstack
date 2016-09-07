@@ -52,6 +52,7 @@
   command: keystone {{ openstack.keystone_args }} endpoint-list
   register: _endpoints
 
+- debug: var=_tenants
 
 # Add keystone tenants
 - name: create admin tenant in keystone
