@@ -65,9 +65,13 @@
   command: keystone {{ openstack.keystone_args }} role-create --name admin
   when: "'admin' not in _roles.stdout"
 
+- name: check if admin role is assigned to admin:admin
+  command: keystone {{ openstack.keystone_args }} user-role-list --user admin --tenant admin
+  register: _admin_role_list
+
 - name: add admin role to tenant and user
   command: keystone {{ openstack.keystone_args }} user-role-add --user admin --tenant admin --role admin
-
+  when: "'admin' not in _admin_role_list.stdout"
 
 - name: create demo tenant in keystone
   command: keystone {{ openstack.keystone_args }} tenant-create --name demo --description "Demo Tenant"
