@@ -56,15 +56,15 @@
 # Add keystone tenants
 - name: create admin tenant in keystone
   command: keystone {{ openstack.keystone_args }} tenant-create --name admin --description "Admin Tenant"
-  when: 'admin' not in _tenants
+  when: "'admin' not in _tenants"
 
 - name: create admin user
   command: keystone {{ openstack.keystone_args }} user-create --name admin --pass "{{openstack.admin_password}}" --email "admin@example.com"
-  when: 'admin' not in _users
+  when: "'admin' not in _users"
 
 - name: create admin role in keystone
   command: keystone {{ openstack.keystone_args }} role-create --name admin
-  when: 'admin' not in _roles
+  when: "'admin' not in _roles"
 
 - name: add admin role to tenant and user
   command: keystone {{ openstack.keystone_args }} user-role-add --user admin --tenant admin --role admin
@@ -72,23 +72,23 @@
 
 - name: create demo tenant in keystone
   command: keystone {{ openstack.keystone_args }} tenant-create --name demo --description "Demo Tenant"
-  when: 'demo' not in _tenants
+  when: "'demo' not in _tenants"
 
 
 - name: create demo user
   command: keystone {{ openstack.keystone_args }} user-create --name demo --pass "{{openstack.demo_password}}" --email "demo@example.com"
-  when: 'demo' not in _users
+  when: "'demo' not in _users"
 
 
 - name: create service tenant in keystone
   command: keystone {{ openstack.keystone_args }} tenant-create --name service --description "Service Tenant"
-  when: 'service' not in _tenants
+  when: "'service' not in _tenants"
 
 
 # Add service entity and endpoints
 - name: create keystone service in keystone
   command: keystone {{ openstack.keystone_args }} service-create --name keystone --type identity --description "Openstack Identity"
-  when: 'keystone' not in _services
+  when: "'keystone' not in _services"
 
 
 - name: fetch keystone's id
@@ -97,4 +97,4 @@
 
 - name: create keystone endpoint in keystone
   command: keystone {{ openstack.keystone_args }} endpoint-create --service-id {{ _keystone_id }} --publicurl http://controller:5000/v2.0 --internalurl http://controller:5000/v2.0 --adminurl http://controller:35357/v2.0 --region regionOne
-  when: 'keystone' not in _endpoints
+  when: "'keystone' not in _endpoints"
