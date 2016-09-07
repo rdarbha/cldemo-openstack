@@ -4,7 +4,7 @@
   apt: pkg={{item}} state=present
   with_items:
     - mysql-server
-    - mysqldump
+    - mysql-client-5.5
 
 - name: make sure mysql is running
   service: name=mysql state=started
