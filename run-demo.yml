@@ -19,3 +19,10 @@
   become_method: sudo
   roles:
     - ifupdown
+- hosts: server01
+  user: cumulus
+  become: yes
+  become_method: sudo
+  roles:
+    - mysql
+    - openstack-keystone
