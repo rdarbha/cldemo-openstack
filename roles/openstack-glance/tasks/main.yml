@@ -1,0 +1,84 @@
+
+# Install required packages
+- name: install packages
+  apt: pkg={{item}} state=present
+  with_items:
+    - glance
+    - python-glanceclient
+
+# Install and configure Glance
+
+- name: create a table for glance
+  mysql_db: name=glance state=present
+
+- name: enable db access 1
+  command: mysql -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY '{{ openstack.admin_password }}';"
+
+- name: enable db access 2
+  command: mysql -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY '{{openstack.admin_password}}';"
+
+- name: collect users
+  command: keystone {{ openstack.keystone_args }} user-list
+  register: _users
+
+- name: create glance user
+  command: keystone {{ openstack.keystone_args }} user-create --name glance --pass "{{openstack.admin_password}}"
+  when: "'glance' not in _users.stdout"
+
+- name: check if admin role is assigned to glance:service
+  command: keystone {{ openstack.keystone_args }} user-role-list --user glance --tenant service
+  register: _admin_role_list
+
+- name: add admin role to tenant and user
+  command: keystone {{ openstack.keystone_args }} user-role-add --user glance --tenant service --role admin
+  when: "'admin' not in _admin_role_list.stdout"
+
+- name: collect services
+  command: keystone {{ openstack.keystone_args }} service-list
+  register: _services
+
+- name: create glance service in keystone
+  command: keystone {{ openstack.keystone_args }} service-create --name glance --type image --description "Openstack Image"
+  when: "'glance' not in _services.stdout"
+
+- name: fetch glance's id
+  shell: keystone {{ openstack.keystone_args }} service-list | awk '/ identity / {print $2}'
+  register: _glance_id
+
+- name: create keystone endpoint in keystone
+  command: keystone {{ openstack.keystone_args }} endpoint-create --service-id {{ _glance_id.stdout }} --publicurl http://controller:9292/v2.0 --internalurl http://controller:9292/v2.0 --adminurl http://controller:9292/v2.0 --region regionOne
+  when: "'{{_glance_id.stdout}}' not in _endpoints.stdout"
+
+- name: Write glance config files
+  template: src={{ item }}.conf.j2 dest=/etc/glance/{{ item }}.conf
+  with_items:
+      - glance-api
+      - glance-registry
+  notify: restart glance
+
+- name: glance dbsync
+  shell: su -s /bin/sh -c "glance-manage db_sync" glance
+
+- name: start glance
+  service: name={{ item }} state=started
+  with_items:
+      - glance-registry
+      - glance-api
+
+- name: flush handlers in case of changed config
+  meta: flush_handlers
+
+- name: collect images
+  command: glance {{ openstack.keystone_args }} image-list
+  register: _images
+
+- name: download cirros.conf
+  get_url:
+    url: http://download.cirros-cloud.net/0.3.3/cirros-0.3.3-x86_64-disk.img
+    dest: /tmp/
+    mode: 0440
+  when: "'cirros' not in _images.stdout"
+
+- name: add cirros as an image
+  command: glance {{ openstack.keystone_args }} image-create --name "cirros-0.3.3-x86_64" --file /tmp/cirros-0.3.3-x86_64-disk.img --disk-format qcow2 --container-format bare --is-public True --progress
+  when: "'cirros' not in _images.stdout"
