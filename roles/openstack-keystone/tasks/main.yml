@@ -27,6 +27,9 @@
 - name: start keystone
   service: name=keystone state=started
 
+- name: flush handlers in case of changed config
+  meta: flush_handlers
+
 # Add keystone tenants
 
 - name: create admin tenant in keystone
