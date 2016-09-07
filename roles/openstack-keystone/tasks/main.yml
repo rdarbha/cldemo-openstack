@@ -33,27 +33,27 @@
 # Add keystone tenants
 
 - name: create admin tenant in keystone
-  command: keystone tenant-create --name admin --description "Admin Tenant" --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
+  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 tenant-create --name admin --description "Admin Tenant"
 
 - name: create admin user
-  command: keystone user-create --name admin --pass "{{openstack.admin_password}}" --email "admin@example.com" --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
+  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 user-create --name admin --pass "{{openstack.admin_password}}" --email "admin@example.com"
 
 - name: create admin role in keystone
-  command: keystone role-create --name admin --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
+  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 role-create --name admin
 
 - name: add admin role to tenant and user
-  command: keystone user-role-add --user admin --tenant admin --role admin --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
+  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 user-role-add --user admin --tenant admin --role admin
 
 
 - name: create demo tenant in keystone
-  command: keystone tenant-create --name demo --description "Demo Tenant" --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
+  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 tenant-create --name demo --description "Demo Tenant"
 
 - name: create demo user
-  command: keystone user-create --name demo --pass "{{openstack.demo_password}}" --email "demo@example.com" --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
+  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 user-create --name demo --pass "{{openstack.demo_password}}" --email "demo@example.com"
 
 
 - name: create service tenant in keystone
-  command: keystone tenant-create --name service --description "Service Tenant" --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
+  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 tenant-create --name service --description "Service Tenant" --os-token '{{openstack.admin_token}}'
 
 
 # Add service entity and endpoints
