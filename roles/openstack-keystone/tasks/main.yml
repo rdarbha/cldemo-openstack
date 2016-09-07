@@ -95,7 +95,7 @@
 
 
 - name: fetch keystone's id
-  shell: keystone service-list | awk '/ identity / {print $2}'
+  shell: keystone {{ openstack.keystone_args }} service-list | awk '/ identity / {print $2}'
   register: _keystone_id
 
 - name: create keystone endpoint in keystone
