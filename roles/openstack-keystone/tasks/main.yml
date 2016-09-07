@@ -1,10 +1,12 @@
 
 # Install required packages
+- name: get the mitaka packages
+  apt_repository: repo='cloud-archive:mitaka' state=present
+
 - name: install packages
   apt: pkg={{item}} state=present
   with_items:
     - keystone
-    - python-keystoneclient
 
 # Install and configure Keystone
 
