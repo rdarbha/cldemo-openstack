@@ -51,3 +51,15 @@
 
 - name: create service tenant in keystone
   command: keystone tenant-create --name service --description "Service Tenant" --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
+
+
+# Add service entity and endpoints
+- name: create keystone service in keystone
+  command: keystone service-create --name keystone --type identity --description "Openstack Identity" --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
+
+- name: fetch keystone's id
+  shell: keystone service-list | awk '/ identity / {print $2}'
+  register: _keystone_id
+
+- name: create keystone endpoint in keystone
+  command: keystone endpoint-create --service-id {{ _keystone_id }} --publicurl http://controller:5000/v2.0 --internalurl http://controller:5000/v2.0 --adminurl http://controller:35357/v2.0 --region regionOne --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0
