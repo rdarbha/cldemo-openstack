@@ -30,39 +30,71 @@
 - name: flush handlers in case of changed config
   meta: flush_handlers
 
-# Add keystone tenants
 
+# Collect keystone data to avoid duplication errors
+- name: collect tenants
+  command: keystone {{ openstack.keystone_args }} tenant-list
+  register: _tenants
+
+- name: collect users
+  command: keystone {{ openstack.keystone_args }} user-list
+  register: _users
+
+- name: collect roles
+  command: keystone {{ openstack.keystone_args }} role-list
+  register: _roles
+
+- name: collect services
+  command: keystone {{ openstack.keystone_args }} service-list
+  register: _services
+
+- name: collect endpoints
+  command: keystone {{ openstack.keystone_args }} endpoint-list
+  register: _endpoints
+
+
+# Add keystone tenants
 - name: create admin tenant in keystone
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 tenant-create --name admin --description "Admin Tenant"
+  command: keystone {{ openstack.keystone_args }} tenant-create --name admin --description "Admin Tenant"
+  when: 'admin' not in _tenants
 
 - name: create admin user
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 user-create --name admin --pass "{{openstack.admin_password}}" --email "admin@example.com"
+  command: keystone {{ openstack.keystone_args }} user-create --name admin --pass "{{openstack.admin_password}}" --email "admin@example.com"
+  when: 'admin' not in _users
 
 - name: create admin role in keystone
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 role-create --name admin
+  command: keystone {{ openstack.keystone_args }} role-create --name admin
+  when: 'admin' not in _roles
 
 - name: add admin role to tenant and user
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 user-role-add --user admin --tenant admin --role admin
+  command: keystone {{ openstack.keystone_args }} user-role-add --user admin --tenant admin --role admin
 
 
 - name: create demo tenant in keystone
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 tenant-create --name demo --description "Demo Tenant"
+  command: keystone {{ openstack.keystone_args }} tenant-create --name demo --description "Demo Tenant"
+  when: 'demo' not in _tenants
+
 
 - name: create demo user
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 user-create --name demo --pass "{{openstack.demo_password}}" --email "demo@example.com"
+  command: keystone {{ openstack.keystone_args }} user-create --name demo --pass "{{openstack.demo_password}}" --email "demo@example.com"
+  when: 'demo' not in _users
 
 
 - name: create service tenant in keystone
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 tenant-create --name service --description "Service Tenant"
+  command: keystone {{ openstack.keystone_args }} tenant-create --name service --description "Service Tenant"
+  when: 'service' not in _tenants
 
 
 # Add service entity and endpoints
 - name: create keystone service in keystone
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 service-create --name keystone --type identity --description "Openstack Identity"
+  command: keystone {{ openstack.keystone_args }} service-create --name keystone --type identity --description "Openstack Identity"
+  when: 'keystone' not in _services
+
 
 - name: fetch keystone's id
   shell: keystone service-list | awk '/ identity / {print $2}'
   register: _keystone_id
 
 - name: create keystone endpoint in keystone
-  command: keystone --os-token '{{openstack.admin_token}}' --os-endpoint http://controller:35357/v2.0 endpoint-create --service-id {{ _keystone_id }} --publicurl http://controller:5000/v2.0 --internalurl http://controller:5000/v2.0 --adminurl http://controller:35357/v2.0 --region regionOne
+  command: keystone {{ openstack.keystone_args }} endpoint-create --service-id {{ _keystone_id }} --publicurl http://controller:5000/v2.0 --internalurl http://controller:5000/v2.0 --adminurl http://controller:35357/v2.0 --region regionOne
+  when: 'keystone' not in _endpoints
