@@ -7,5 +7,9 @@
     - mysql-client-5.5
     - python-mysqldb
 
+- name: configure mysql to run on all ports.
+  copy: src=my.cnf dest=/etc/mysql/my.cnf
+  notify: restart mysql
+
 - name: make sure mysql is running
   service: name=mysql state=started
