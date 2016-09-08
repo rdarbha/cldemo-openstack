@@ -41,6 +41,8 @@
 - name: flush handlers in case of changed config
   meta: flush_handlers
 
+- name: wait for keystone to wake up
+  pause: seconds=10
 
 
 
@@ -49,6 +51,21 @@
   command: openstack {{ openstack.args }} service list
   register: _services
 
+- name: collect users
+  command: openstack {{ openstack.args }} user list
+  register: _users
+
+- name: collect roles
+  command: openstack {{ openstack.args }} role list
+  register: _roles
+
+- name: collect projects
+  command: openstack {{ openstack.args }} project list
+  register: _projects
+
+- name: collect domains
+  command: openstack {{ openstack.args }} domain list
+  register: _domains
 
 
 
@@ -64,3 +81,43 @@
       - {a: "internal", b: 5000}
       - {a: "admin", b: 35357}
   when: "'keystone' not in _services.stdout"
+
+- name: add default domain
+  command: openstack {{openstack.args}} domain create --description "Default Domain" default
+  when: "'default' not in _domains.stdout"
+
+- name: add admin project
+  command: openstack {{openstack.args}} project create --domain default --description "Admin project" admin
+  when: "'admin' not in _projects.stdout"
+
+- name: add admin user
+  command: openstack {{openstack.args}} user create --domain default --password {{openstack.admin_password}} admin
+  when: "'admin' not in _users.stdout"
+
+- name: add admin role
+  command: openstack {{openstack.args}} role create admin
+  when: "'admin' not in _roles.stdout"
+
+- name: add admin role to admin project and user
+  command: openstack {{openstack.args}} role add --project admin --user admin admin
+  when: "'admin' not in _users.stdout"
+
+- name: add service project
+  command: openstack {{openstack.args}} project create --domain default --description "Service Project" service
+  when: "'service' not in _projects.stdout"
+
+- name: add demo project
+  command: openstack {{openstack.args}} project create --domain default --description "Demo Project" demo
+  when: "'demo' not in _projects.stdout"
+
+- name: add demo user
+  command: openstack {{openstack.args}} user create --domain default --password {{openstack.demo_password}} demo
+  when: "'demo' not in _users.stdout"
+
+- name: add user role
+  command: openstack {{openstack.args}} role create user
+  when: "'user' not in _roles.stdout"
+
+- name: add user role to demo project and user
+  command: openstack {{openstack.args}} role add --project demo --user demo user
+  when: "'demo' not in _users.stdout"
