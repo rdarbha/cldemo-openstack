@@ -92,7 +92,7 @@
   meta: flush_handlers
 
 - name: wait for glance to wake up
-  pause: seconds=20
+  pause: seconds=10
 
 - name: collect images
   command: openstack {{ openstack.admin_credentials }} image list
