@@ -105,5 +105,5 @@
  # when: "'cirros' not in _images.stdout"
 
 - name: create the cirros image
-  command: openstack {{ openstack.admin_credentials }} image create "cirros" --file /tmp/cirros-0.3.4-x86_64-disk.img  --disk-format qcow2 --container-format bare --public
+  command: openstack {{ openstack.admin_credentials }} image create "cirros" --file /tmp/cirros-0.3.3-x86_64-disk.img  --disk-format qcow2 --container-format bare --public
  # when: "'cirros' not in _images.stdout"
