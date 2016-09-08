@@ -26,4 +26,4 @@
   roles:
     - mysql
     - openstack-keystone
-    #- openstack-glance
+    - openstack-glance

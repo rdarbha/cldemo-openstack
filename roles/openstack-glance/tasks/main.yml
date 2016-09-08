@@ -1,16 +1,20 @@
 
 # Install required packages
 - name: get the mitaka packages
-  apt_repository: repo='cloud-archive:mitaka' state=present
+  apt_repository: repo='deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/mitaka main' state=present
 
-- name: install packages
+- name: install keyring
   apt: pkg={{item}} state=present
   with_items:
+    - ubuntu-cloud-keyring
+
+- name: install packages
+  apt: pkg={{item}} state=present update_cache=yes
+  with_items:
     - glance
-    - python-glanceclient
+    - python-openstackclient
 
 # Install and configure Glance
-
 - name: create a table for glance
   mysql_db: name=glance state=present
 
@@ -24,59 +28,66 @@
   command: mysql -e "use glance; alter table migrate_version convert to character set utf8 collate utf8_unicode_ci; flush privileges;"
 
 
-- name: collect users
-  command: keystone {{ openstack.keystone_args }} user-list
-  register: _users
+- name: glance config files
+  template: src={{item}}.j2 dest=/etc/glance/{{item}}
+  with_items:
+      - glance-api.conf
+      - glance-registry.conf
+  notify: restart keystone
 
-- name: create glance user
-  command: keystone {{ openstack.keystone_args }} user-create --name glance --pass "{{openstack.admin_password}}"
-  when: "'glance' not in _users.stdout"
+- name: keystone dbsync
+  shell: su -s /bin/sh -c "keystone-manage db_sync" keystone
 
-- name: check if admin role is assigned to glance:service
-  command: keystone {{ openstack.keystone_args }} user-role-list --user glance --tenant service
-  register: _admin_role_list
 
-- name: add admin role to tenant and user
-  command: keystone {{ openstack.keystone_args }} user-role-add --user glance --tenant service --role admin
-  when: "'admin' not in _admin_role_list.stdout"
-
+# Create glance user, service, and endpoint
 - name: collect services
-  command: keystone {{ openstack.keystone_args }} service-list
+  command: openstack {{ openstack.args }} service list
   register: _services
 
-- name: create glance service in keystone
-  command: keystone {{ openstack.keystone_args }} service-create --name glance --type image --description "Openstack Image"
+- name: collect users
+  command: openstack {{ openstack.args }} user list
+  register: _users
+
+- name: collect roles
+  command: openstack {{ openstack.args }} role list
+  register: _roles
+
+- name: collect projects
+  command: openstack {{ openstack.args }} project list
+  register: _projects
+
+- name: collect domains
+  command: openstack {{ openstack.args }} domain list
+  register: _domains
+
+- name: add glance user
+  command: openstack {{openstack.args}} user create --domain default --password {{openstack.admin_password}} glance
+  when: "'glance' not in _users.stdout"
+
+- name: add admin role to glance user
+  command: openstack {{openstack.args}} role add --project service --user glance admin
+  when: "'glance' not in _users.stdout"
+
+- name: add glance service
+  command: openstack {{openstack.args}} service create --name glance --description "Openstack Image" image
   when: "'glance' not in _services.stdout"
 
-- name: fetch glance's id
-  shell: keystone {{ openstack.keystone_args }} service-list | awk '/ identity / {print $2}'
-  register: _glance_id
-
-- name: create keystone endpoint in keystone
-  command: keystone {{ openstack.keystone_args }} endpoint-create --service-id {{ _glance_id.stdout }} --publicurl http://controller:9292/v2.0 --internalurl http://controller:9292/v2.0 --adminurl http://controller:9292/v2.0 --region regionOne
-  when: "'{{_glance_id.stdout}}' not in _endpoints.stdout"
-
-- name: Write glance config files
-  template: src={{ item }}.conf.j2 dest=/etc/glance/{{ item }}.conf
+- name: add glance endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller:{{ item.b }}/v3
   with_items:
-      - glance-api
-      - glance-registry
-  notify: restart glance
-
-- name: glance dbsync
-  shell: su -s /bin/sh -c "glance-manage db_sync" glance
-
-- name: start glance
-  service: name={{ item }} state=started
-  with_items:
-      - glance-registry
-      - glance-api
+      - {a: "public", b: 9292}
+      - {a: "internal", b: 9292}
+      - {a: "admin", b: 9292}
+  when: "'glance' not in _services.stdout"
 
 - name: flush handlers in case of changed config
   meta: flush_handlers
 
+- name: wait for glance to wake up
+  pause: seconds=10
+
 - name: collect images
-  command: glance image-list
+  command: openstack {{ openstack.args }} image list
   register: _images
 
 - name: download cirros.conf
@@ -86,6 +97,6 @@
     mode: 0440
   when: "'cirros' not in _images.stdout"
 
-- name: add cirros as an image
-  command: glance image-create --name "cirros-0.3.3-x86_64" --file /tmp/cirros-0.3.3-x86_64-disk.img --disk-format qcow2 --container-format bare --is-public True --progress
+- name: create the cirros image
+  command: openstack {{ openstack.args }} image create "cirros" --file cirros-0.3.4-x86_64-disk.img  --disk-format qcow2 --container-format bare --public
   when: "'cirros' not in _images.stdout"
