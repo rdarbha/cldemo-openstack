@@ -54,7 +54,7 @@
 
 # Add keystone services and endpoints
 - name: add keystone service
-  command: openstack {{openstack.args}} --name keystone --description "Openstack Identity" identity
+  command: openstack {{openstack.args}} service create --name keystone --description "Openstack Identity" identity
   when: "'keystone' not in _services.stdout"
 
 - name: add keystone endpoints
