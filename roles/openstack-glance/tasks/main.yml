@@ -80,7 +80,7 @@
   when: "'glance' not in _services.stdout"
 
 - name: add glance endpoints
-  command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller:{{ item.b }}/v3
+  command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller:{{ item.b }}
   with_items:
       - {a: "public", b: 9292}
       - {a: "internal", b: 9292}
@@ -93,17 +93,17 @@
 - name: wait for glance to wake up
   pause: seconds=10
 
-#- name: collect images
-#  command: openstack {{ openstack.admin_credentials }} image list
-#  register: _images
+- name: collect images
+  command: openstack {{ openstack.admin_credentials }} image list
+  register: _images
 
 - name: download cirros.conf
   get_url:
     url: http://download.cirros-cloud.net/0.3.3/cirros-0.3.3-x86_64-disk.img
     dest: /tmp/
     mode: 0440
- # when: "'cirros' not in _images.stdout"
+  when: "'cirros' not in _images.stdout"
 
 - name: create the cirros image
   command: openstack {{ openstack.admin_credentials }} image create "cirros" --file /tmp/cirros-0.3.3-x86_64-disk.img  --disk-format qcow2 --container-format bare --public
- # when: "'cirros' not in _images.stdout"
+  when: "'cirros' not in _images.stdout"
