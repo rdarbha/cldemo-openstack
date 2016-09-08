@@ -31,9 +31,20 @@
       - glance-registry.conf
   notify: restart glance
 
-- name: keystone dbsync
-  shell: su -s /bin/sh -c "keystone-manage db_sync" keystone
+- name: glance dbsync
+  shell: su -s /bin/sh -c "glance-manage db_sync" glance
 
+- name: start glance api
+  service: name=glance-api state=started
+
+- name: start glance regisry
+  service: name=glance-registry state=started
+
+- name: flush handlers in case of changed config
+  meta: flush_handlers
+
+- name: wait for keystone to wake up
+  pause: seconds=10
 
 # Create glance user, service, and endpoint
 - name: collect services
