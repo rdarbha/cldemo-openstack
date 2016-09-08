@@ -60,7 +60,7 @@
 - name: add keystone endpoints
   command: openstack {{openstack.args}} endpoint create --region RegionOne identity {{item[0]}} http://controller:{{ item[1] }}/v3
   with_items:
-      - ("public", 5000)
-      - ("internal", 5000)
-      - ("admin", 35357)
+      - ["public", 5000]
+      - ["internal", 5000]
+      - ["admin", 35357]
   when: "'keystone' not in _services.stdout"
