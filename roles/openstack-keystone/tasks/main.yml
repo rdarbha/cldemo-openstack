@@ -4,7 +4,7 @@
   apt_repository: repo='deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/mitaka main' state=present
 
 - name: install packages
-  apt: pkg={{item}} state=present update=true
+  apt: pkg={{item}} state=present update_cache=yes
   with_items:
     - keystone
     - python-openstackclient
