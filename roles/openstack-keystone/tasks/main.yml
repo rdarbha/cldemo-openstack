@@ -3,6 +3,9 @@
 - name: get the mitaka packages
   apt_repository: repo='deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/mitaka main' state=present
 
+- name: get the mitaka key
+  apt_key: id=8C633C43 keyserver=keyserver.ubuntu.com
+
 - name: install packages
   apt: pkg={{item}} state=present update_cache=yes
   with_items:
