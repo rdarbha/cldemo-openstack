@@ -90,6 +90,10 @@
 - name: wait for glance to wake up
   pause: seconds=10
 
+
+
+# Now add a basic image.
+
 - name: collect images
   command: openstack {{ openstack.admin_credentials }} image list
   register: _images

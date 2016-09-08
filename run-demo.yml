@@ -29,3 +29,4 @@
     - memcached
     - openstack-keystone
     - openstack-glance
+    - openstack-nova-controller

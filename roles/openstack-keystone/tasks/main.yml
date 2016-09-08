@@ -82,6 +82,11 @@
       - {a: "admin", b: 35357}
   when: "'keystone' not in _services.stdout"
 
+
+
+
+# Add a bunch of users
+
 - name: add default domain
   command: openstack {{openstack.args}} domain create --description "Default Domain" default
   when: "'default' not in _domains.stdout"
