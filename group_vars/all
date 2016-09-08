@@ -96,4 +96,4 @@ openstack:
     admin_token: "ac014aaa2beb079192be"
     admin_password: "CumulusLinux"
     demo_password: "demo"
-    args: "--os-token 'ac014aaa2beb079192be' --os-url http://controller:35357/v3 --os-identity-api-version 3"
+    args: "--os-token ac014aaa2beb079192be --os-url http://controller:35357/v3 --os-identity-api-version 3"

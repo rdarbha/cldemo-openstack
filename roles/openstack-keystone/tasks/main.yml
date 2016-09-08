@@ -46,7 +46,7 @@
 
 # Collect keystone data to avoid duplication errors
 - name: collect services
-  command: openstack {{ openstack.keystone_args }} service list
+  command: openstack {{ openstack.args }} service list
   register: _services
 
 
