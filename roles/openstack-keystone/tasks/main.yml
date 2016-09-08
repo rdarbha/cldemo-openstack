@@ -7,6 +7,7 @@
   apt: pkg={{item}} state=present
   with_items:
     - keystone
+    - python-openstackclient
 
 # Install and configure Keystone
 
@@ -26,6 +27,9 @@
 - name: keystone dbsync
   shell: su -s /bin/sh -c "keystone-manage db_sync" keystone
 
+- name: configure fernet
+  command: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+
 - name: start keystone
   service: name=keystone state=started
 
@@ -33,73 +37,25 @@
   meta: flush_handlers
 
 
+
+
 # Collect keystone data to avoid duplication errors
-- name: collect tenants
-  command: keystone {{ openstack.keystone_args }} tenant-list
-  register: _tenants
-
-- name: collect users
-  command: keystone {{ openstack.keystone_args }} user-list
-  register: _users
-
-- name: collect roles
-  command: keystone {{ openstack.keystone_args }} role-list
-  register: _roles
-
 - name: collect services
-  command: keystone {{ openstack.keystone_args }} service-list
+  command: openstack {{ openstack.keystone_args }} service list
   register: _services
 
-- name: collect endpoints
-  command: keystone {{ openstack.keystone_args }} endpoint-list
-  register: _endpoints
-
-# Add keystone tenants
-- name: create admin tenant in keystone
-  command: keystone {{ openstack.keystone_args }} tenant-create --name admin --description "Admin Tenant"
-  when: "'admin' not in _tenants.stdout"
-
-- name: create admin user
-  command: keystone {{ openstack.keystone_args }} user-create --name admin --pass "{{openstack.admin_password}}" --email "admin@example.com"
-  when: "'admin' not in _users.stdout"
-
-- name: create admin role in keystone
-  command: keystone {{ openstack.keystone_args }} role-create --name admin
-  when: "'admin' not in _roles.stdout"
-
-- name: check if admin role is assigned to admin:admin
-  command: keystone {{ openstack.keystone_args }} user-role-list --user admin --tenant admin
-  register: _admin_role_list
-
-- name: add admin role to tenant and user
-  command: keystone {{ openstack.keystone_args }} user-role-add --user admin --tenant admin --role admin
-  when: "'admin' not in _admin_role_list.stdout"
-
-- name: create demo tenant in keystone
-  command: keystone {{ openstack.keystone_args }} tenant-create --name demo --description "Demo Tenant"
-  when: "'demo' not in _tenants.stdout"
 
 
-- name: create demo user
-  command: keystone {{ openstack.keystone_args }} user-create --name demo --pass "{{openstack.demo_password}}" --email "demo@example.com"
-  when: "'demo' not in _users.stdout"
 
-
-- name: create service tenant in keystone
-  command: keystone {{ openstack.keystone_args }} tenant-create --name service --description "Service Tenant"
-  when: "'service' not in _tenants.stdout"
-
-
-# Add service entity and endpoints
-- name: create keystone service in keystone
-  command: keystone {{ openstack.keystone_args }} service-create --name keystone --type identity --description "Openstack Identity"
+# Add keystone services and endpoints
+- name: add keystone service
+  command: openstack {{openstack.args}} --name keystone --description "Openstack Identity" identity
   when: "'keystone' not in _services.stdout"
 
-
-- name: fetch keystone's id
-  shell: keystone {{ openstack.keystone_args }} service-list | awk '/ identity / {print $2}'
-  register: _keystone_id
-
-- name: create keystone endpoint in keystone
-  command: keystone {{ openstack.keystone_args }} endpoint-create --service-id {{ _keystone_id.stdout }} --publicurl http://controller:5000/v2.0 --internalurl http://controller:5000/v2.0 --adminurl http://controller:35357/v2.0 --region regionOne
-  when: "'{{_keystone_id.stdout}}' not in _endpoints.stdout"
+- name: add keystone endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne identity {{item[0]}} http://controller:{{ item[1] }}/v3
+  with_items:
+      - ("public", 5000)
+      - ("internal", 5000)
+      - ("admin", 35357)
+  when: "'keystone' not in _services.stdout"
