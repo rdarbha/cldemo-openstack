@@ -86,10 +86,6 @@
       - {a: "internal", b: 9292}
       - {a: "admin", b: 9292}
   when: "'glance' not in _services.stdout"
-  notify: restart glance
-
-- name: flush handlers in case of changed config
-  meta: flush_handlers
 
 - name: wait for glance to wake up
   pause: seconds=10
