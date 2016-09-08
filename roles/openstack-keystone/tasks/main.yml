@@ -3,7 +3,7 @@
 - name: get the mitaka packages
   apt_repository: repo='deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/mitaka main' state=present
 
-- name: install packages
+- name: install keyring
   apt: pkg={{item}} state=present
   with_items:
     - ubuntu-cloud-keyring
