@@ -1,0 +1,15 @@
+
+# Install required packages
+- name: install packages
+  apt: pkg={{item}} state=present
+  with_items:
+    - rabbitmq-server
+
+- name: make sure mysql is running
+  service: name=rabbitmq-server state=started
+
+- name: add openstack user to rabbitmq
+  command: rabbitmqctl add_user openstack {{ openstack.admin_password }}
+
+- name: add openstack permissions to rabbitmq
+  command: rabbitmqctl set_permissions openstack ".*" ".*" ".*"

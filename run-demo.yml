@@ -25,5 +25,7 @@
   become_method: sudo
   roles:
     - mysql
+    - rabbitmq
+    - memcached
     - openstack-keystone
     - openstack-glance
