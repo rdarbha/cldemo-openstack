@@ -3,7 +3,7 @@
 - name: install packages
   apt: pkg={{item}} state=present
   with_items:
-    - mysql-server
+    - mysql-server-5.7
     - mysql-client-5.7
     - python-mysqldb
 
