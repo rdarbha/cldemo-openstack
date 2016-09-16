@@ -44,16 +44,10 @@
   notify: restart nova
 
 - name: nova api dbsync
-  become: true
-  become_user: nova
-  become_method: su
-  shell: nova-manage api_db sync
+  shell: su -s /bin/sh -c "nova-manage api_db sync" nova
 
 - name: nova dbsync
-  become: true
-  become_user: nova
-  become_method: su
-  shell: nova-manage db sync
+  shell: su -s /bin/sh -c "nova-manage db sync" nova
 
 - name: start nova api
   service: name=nova-api state=started
