@@ -90,8 +90,8 @@
   command: openstack {{openstack.args}} user create --domain default --password {{openstack.admin_password}} nova
   when: "'nova' not in _users.stdout"
 
-- name: add nova role to glance user
-  command: openstack {{openstack.args}} role add --project service --user glance nova
+- name: add admin role to nova user
+  command: openstack {{openstack.args}} role add --project service --user nova admin
   when: "'nova' not in _users.stdout"
 
 - name: add nova service
