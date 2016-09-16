@@ -30,3 +30,9 @@
     - openstack-keystone
     - openstack-glance
     - openstack-nova-controller
+- hosts: server02,server03,server04
+  user: cumulus
+  become: yes
+  become_method: sudo
+  roles:
+    - openstack-nova-compute
