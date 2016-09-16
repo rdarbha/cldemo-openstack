@@ -93,6 +93,11 @@ interfaces:
 
 # openstack
 openstack:
+    ip:
+        server01: "172.16.1.101"
+        server02: "172.16.1.102"
+        server03: "172.16.1.103"
+        server04: "172.16.1.104"
     admin_token: "ac014aaa2beb079192be"
     admin_password: "CumulusLinux"
     demo_password: "demo"

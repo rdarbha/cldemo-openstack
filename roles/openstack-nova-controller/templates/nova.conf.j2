@@ -11,7 +11,7 @@ api_paste_config=/etc/nova/api-paste.ini
 enabled_apis = osapi_compute,metadata
 rpc_backend = rabbit
 auth_strategy = keystone
-my_ip = 172.16.1.101
+my_ip = {{ openstack.ip[ansible_hostname] }}
 use_neutron = True
 firewall_driver = nova.virt.firewall.NoopFirewallDriver
 
