@@ -53,3 +53,18 @@ api_servers = http://controller:9292
 
 [oslo_concurrency]
 lock_path = /var/lib/nova/tmp
+
+
+[neutron]
+url = http://controller:9696
+auth_url = http://controller:35357
+auth_type = password
+project_domain_name = default
+user_domain_name = default
+region_name = RegionOne
+project_name = service
+username = neutron
+password = {{ openstack.admin_password }}
+
+service_metadata_proxy = True
+metadata_proxy_shared_secret = {{ openstack.admin_password }}

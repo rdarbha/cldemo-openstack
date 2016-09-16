@@ -29,6 +29,7 @@
     - memcached
     - openstack-keystone
     - openstack-glance
+    - openstack-neutron-controller
     - openstack-nova-controller
 - hosts: server02,server03,server04
   user: cumulus
