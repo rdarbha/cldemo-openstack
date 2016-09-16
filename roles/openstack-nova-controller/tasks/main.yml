@@ -45,10 +45,12 @@
 
 - name: nova api dbsync
   become: nova
+  become-method: su
   shell: nova-manage api_db sync
 
 - name: nova dbsync
   become: nova
+  become-method: su
   shell: nova-manage db sync
 
 - name: start nova api
