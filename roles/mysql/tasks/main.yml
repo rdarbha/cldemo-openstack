@@ -8,7 +8,7 @@
     - python-mysqldb
 
 - name: configure mysql to run on all ports.
-  copy: src=my.cnf dest=/etc/mysql/mysql.conf.d/mysqld.cnf
+  copy: src=mysqld.cnf dest=/etc/mysql/mysql.conf.d/mysqld.cnf
   notify: restart mysql
 
 - name: make sure mysql is running
