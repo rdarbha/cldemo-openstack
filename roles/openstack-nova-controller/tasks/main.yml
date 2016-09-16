@@ -44,12 +44,14 @@
   notify: restart nova
 
 - name: nova api dbsync
-  become: nova
+  become: true
+  become_user: nova
   become_method: su
   shell: nova-manage api_db sync
 
 - name: nova dbsync
-  become: nova
+  become: true
+  become_user: nova
   become_method: su
   shell: nova-manage db sync
 
