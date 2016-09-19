@@ -29,7 +29,7 @@
 - name: enable db access 2
   command: mysql  -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY '{{openstack.admin_password}}';"
 
-- name: nova config files
+- name: neutron config files
   template: src={{item}}.j2 dest=/etc/neutron/{{item}}
   with_items:
       - metadata_agent.ini

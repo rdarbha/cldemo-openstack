@@ -36,4 +36,5 @@
   become: yes
   become_method: sudo
   roles:
+    - openstack-neutron-compute
     - openstack-nova-compute
