@@ -24,13 +24,13 @@
 #api_extensions_path =
 
 # The type of authentication to use (string value)
-#auth_strategy = keystone
+auth_strategy = keystone
 
 # The core plugin Neutron will use (string value)
 core_plugin = ml2
 
 # The service plugins Neutron will use (list value)
-#service_plugins =
+service_plugins =
 
 # The base MAC address Neutron will use for VIFs. The first 3 octets will
 # remain unchanged. If the 4th octet is not 00, it will also be used. The
@@ -134,11 +134,11 @@ core_plugin = ml2
 #force_gateway_on_subnet = true
 
 # Send notification to nova when port status changes (boolean value)
-#notify_nova_on_port_status_changes = true
+notify_nova_on_port_status_changes = true
 
 # Send notification to nova when port data (fixed_ips/floatingip) changes so
 # nova can update its cache. (boolean value)
-#notify_nova_on_port_data_changes = true
+notify_nova_on_port_data_changes = true
 
 # Number of seconds between sending events to nova if there are any events to
 # send. (integer value)
@@ -517,7 +517,7 @@ core_plugin = ml2
 
 # The messaging driver to use, defaults to rabbit. Other drivers include amqp
 # and zmq. (string value)
-#rpc_backend = rabbit
+rpc_backend = rabbit
 
 # The default exchange under which topics are scoped. May be overridden by an
 # exchange name specified in the transport_url option. (string value)
@@ -690,7 +690,7 @@ root_helper = sudo /usr/bin/neutron-rootwrap /etc/neutron/rootwrap.conf
 # Deprecated group/name - [DEFAULT]/sql_connection
 # Deprecated group/name - [DATABASE]/sql_connection
 # Deprecated group/name - [sql]/connection
-connection = sqlite:////var/lib/neutron/neutron.sqlite
+connection = mysql+pymysql://neutron:{{ openstack.admin_password }}@controller/neutron
 
 # The SQLAlchemy connection string to use to connect to the slave database.
 # (string value)
@@ -768,174 +768,15 @@ connection = sqlite:////var/lib/neutron/neutron.sqlite
 
 
 [keystone_authtoken]
-
-#
-# From keystonemiddleware.auth_token
-#
-
-# Complete public Identity API endpoint. (string value)
-#auth_uri = <None>
-
-# API version of the admin Identity API endpoint. (string value)
-#auth_version = <None>
-
-# Do not handle authorization requests within the middleware, but delegate the
-# authorization decision to downstream WSGI components. (boolean value)
-#delay_auth_decision = false
-
-# Request timeout value for communicating with Identity API server. (integer
-# value)
-#http_connect_timeout = <None>
-
-# How many times are we trying to reconnect when communicating with Identity
-# API Server. (integer value)
-#http_request_max_retries = 3
-
-# Env key for the swift cache. (string value)
-#cache = <None>
-
-# Required if identity server requires client certificate (string value)
-#certfile = <None>
-
-# Required if identity server requires client certificate (string value)
-#keyfile = <None>
-
-# A PEM encoded Certificate Authority to use when verifying HTTPs connections.
-# Defaults to system CAs. (string value)
-#cafile = <None>
-
-# Verify HTTPS connections. (boolean value)
-#insecure = false
-
-# The region in which the identity server can be found. (string value)
-#region_name = <None>
-
-# Directory used to cache files related to PKI tokens. (string value)
-#signing_dir = <None>
-
-# Optionally specify a list of memcached server(s) to use for caching. If left
-# undefined, tokens will instead be cached in-process. (list value)
-# Deprecated group/name - [DEFAULT]/memcache_servers
-#memcached_servers = <None>
-
-# In order to prevent excessive effort spent validating tokens, the middleware
-# caches previously-seen tokens for a configurable duration (in seconds). Set
-# to -1 to disable caching completely. (integer value)
-#token_cache_time = 300
-
-# Determines the frequency at which the list of revoked tokens is retrieved
-# from the Identity service (in seconds). A high number of revocation events
-# combined with a low cache duration may significantly reduce performance.
-# (integer value)
-#revocation_cache_time = 10
-
-# (Optional) If defined, indicate whether token data should be authenticated or
-# authenticated and encrypted. If MAC, token data is authenticated (with HMAC)
-# in the cache. If ENCRYPT, token data is encrypted and authenticated in the
-# cache. If the value is not one of these options or empty, auth_token will
-# raise an exception on initialization. (string value)
-# Allowed values: None, MAC, ENCRYPT
-#memcache_security_strategy = None
-
-# (Optional, mandatory if memcache_security_strategy is defined) This string is
-# used for key derivation. (string value)
-#memcache_secret_key = <None>
-
-# (Optional) Number of seconds memcached server is considered dead before it is
-# tried again. (integer value)
-#memcache_pool_dead_retry = 300
-
-# (Optional) Maximum total number of open connections to every memcached
-# server. (integer value)
-#memcache_pool_maxsize = 10
-
-# (Optional) Socket timeout in seconds for communicating with a memcached
-# server. (integer value)
-#memcache_pool_socket_timeout = 3
-
-# (Optional) Number of seconds a connection to memcached is held unused in the
-# pool before it is closed. (integer value)
-#memcache_pool_unused_timeout = 60
-
-# (Optional) Number of seconds that an operation will wait to get a memcached
-# client connection from the pool. (integer value)
-#memcache_pool_conn_get_timeout = 10
-
-# (Optional) Use the advanced (eventlet safe) memcached client pool. The
-# advanced pool will only work under python 2.x. (boolean value)
-#memcache_use_advanced_pool = false
-
-# (Optional) Indicate whether to set the X-Service-Catalog header. If False,
-# middleware will not ask for service catalog on token validation and will not
-# set the X-Service-Catalog header. (boolean value)
-#include_service_catalog = true
-
-# Used to control the use and type of token binding. Can be set to: "disabled"
-# to not check token binding. "permissive" (default) to validate binding
-# information if the bind type is of a form known to the server and ignore it
-# if not. "strict" like "permissive" but if the bind type is unknown the token
-# will be rejected. "required" any form of token binding is needed to be
-# allowed. Finally the name of a binding method that must be present in tokens.
-# (string value)
-#enforce_token_bind = permissive
-
-# If true, the revocation list will be checked for cached tokens. This requires
-# that PKI tokens are configured on the identity server. (boolean value)
-#check_revocations_for_cached = false
-
-# Hash algorithms to use for hashing PKI tokens. This may be a single algorithm
-# or multiple. The algorithms are those supported by Python standard
-# hashlib.new(). The hashes will be tried in the order given, so put the
-# preferred one first for performance. The result of the first hash will be
-# stored in the cache. This will typically be set to multiple values only while
-# migrating from a less secure algorithm to a more secure one. Once all the old
-# tokens are expired this option should be set to a single value for better
-# performance. (list value)
-#hash_algorithms = md5
-
-# Prefix to prepend at the beginning of the path. Deprecated, use identity_uri.
-# (string value)
-#auth_admin_prefix =
-
-# Host providing the admin Identity API endpoint. Deprecated, use identity_uri.
-# (string value)
-#auth_host = 127.0.0.1
-
-# Port of the admin Identity API endpoint. Deprecated, use identity_uri.
-# (integer value)
-#auth_port = 35357
-
-# Protocol of the admin Identity API endpoint. Deprecated, use identity_uri.
-# (string value)
-# Allowed values: http, https
-#auth_protocol = https
-
-# Complete admin Identity API endpoint. This should specify the unversioned
-# root endpoint e.g. https://localhost:35357/ (string value)
-#identity_uri = <None>
-
-# This option is deprecated and may be removed in a future release. Single
-# shared secret with the Keystone configuration used for bootstrapping a
-# Keystone installation, or otherwise bypassing the normal authentication
-# process. This option should not be used, use `admin_user` and
-# `admin_password` instead. (string value)
-#admin_token = <None>
-
-# Service username. (string value)
-#admin_user = <None>
-
-# Service user password. (string value)
-#admin_password = <None>
-
-# Service tenant name. (string value)
-#admin_tenant_name = admin
-
-# Authentication type to load (unknown value)
-# Deprecated group/name - [DEFAULT]/auth_plugin
-#auth_type = <None>
-
-# Config Section from which to load plugin specific options (unknown value)
-#auth_section = <None>
+auth_uri = http://controller:5000
+auth_url = http://controller:35357
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = default
+user_domain_name = default
+project_name = service
+username = neutron
+password = {{ openstack.admin_password }}
 
 
 [matchmaker_redis]
@@ -973,102 +814,14 @@ connection = sqlite:////var/lib/neutron/neutron.sqlite
 
 
 [nova]
-
-#
-# From neutron
-#
-
-# Name of nova region to use. Useful if keystone manages more than one region.
-# (string value)
-#region_name = <None>
-
-# Type of the nova endpoint to use.  This endpoint will be looked up in the
-# keystone catalog and should be one of public, internal or admin. (string
-# value)
-# Allowed values: public, admin, internal
-#endpoint_type = public
-
-#
-# From nova.auth
-#
-
-# Authentication URL (unknown value)
-#auth_url = <None>
-
-# Authentication type to load (unknown value)
-# Deprecated group/name - [DEFAULT]/auth_plugin
-#auth_type = <None>
-
-# PEM encoded Certificate Authority to use when verifying HTTPs connections.
-# (string value)
-#cafile = <None>
-
-# PEM encoded client certificate cert file (string value)
-#certfile = <None>
-
-# Optional domain ID to use with v3 and v2 parameters. It will be used for both
-# the user and project domain in v3 and ignored in v2 authentication. (unknown
-# value)
-#default_domain_id = <None>
-
-# Optional domain name to use with v3 API and v2 parameters. It will be used
-# for both the user and project domain in v3 and ignored in v2 authentication.
-# (unknown value)
-#default_domain_name = <None>
-
-# Domain ID to scope to (unknown value)
-#domain_id = <None>
-
-# Domain name to scope to (unknown value)
-#domain_name = <None>
-
-# Verify HTTPS connections. (boolean value)
-#insecure = false
-
-# PEM encoded client certificate key file (string value)
-#keyfile = <None>
-
-# User's password (unknown value)
-#password = <None>
-
-# Domain ID containing project (unknown value)
-#project_domain_id = <None>
-
-# Domain name containing project (unknown value)
-#project_domain_name = <None>
-
-# Project ID to scope to (unknown value)
-# Deprecated group/name - [DEFAULT]/tenant-id
-#project_id = <None>
-
-# Project name to scope to (unknown value)
-# Deprecated group/name - [DEFAULT]/tenant-name
-#project_name = <None>
-
-# Tenant ID (unknown value)
-#tenant_id = <None>
-
-# Tenant Name (unknown value)
-#tenant_name = <None>
-
-# Timeout value for http requests (integer value)
-#timeout = <None>
-
-# Trust ID (unknown value)
-#trust_id = <None>
-
-# User's domain id (unknown value)
-#user_domain_id = <None>
-
-# User's domain name (unknown value)
-#user_domain_name = <None>
-
-# User id (unknown value)
-#user_id = <None>
-
-# Username (unknown value)
-# Deprecated group/name - [DEFAULT]/username
-#username = <None>
+auth_url = http://controller:35357
+auth_type = password
+project_domain_name = default
+user_domain_name = default
+region_name = RegionOne
+project_name = service
+username = nova
+password = {{ openstack.admin_password }}
 
 
 [oslo_concurrency]
@@ -1239,7 +992,7 @@ connection = sqlite:////var/lib/neutron/neutron.sqlite
 
 # The RabbitMQ broker address where a single node is used. (string value)
 # Deprecated group/name - [DEFAULT]/rabbit_host
-#rabbit_host = localhost
+rabbit_host = controller
 
 # The RabbitMQ broker port where a single node is used. (port value)
 # Minimum value: 0
@@ -1257,11 +1010,11 @@ connection = sqlite:////var/lib/neutron/neutron.sqlite
 
 # The RabbitMQ userid. (string value)
 # Deprecated group/name - [DEFAULT]/rabbit_userid
-#rabbit_userid = guest
+rabbit_userid = openstack
 
 # The RabbitMQ password. (string value)
 # Deprecated group/name - [DEFAULT]/rabbit_password
-#rabbit_password = guest
+rabbit_password = {{ openstack.admin_password }}
 
 # The RabbitMQ login method. (string value)
 # Deprecated group/name - [DEFAULT]/rabbit_login_method
