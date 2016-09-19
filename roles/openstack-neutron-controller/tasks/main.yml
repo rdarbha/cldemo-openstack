@@ -38,7 +38,7 @@
   notify: restart neutron
 
 - name: ml2 config files
-  template: src={{item}}.j2 dest=/etc/neutron/plugins/ml2{{item}}
+  template: src={{item}}.j2 dest=/etc/neutron/plugins/ml2/{{item}}
   with_items:
       - ml2_conf.ini
       - linuxbridge_agent.ini

@@ -768,7 +768,7 @@ connection = mysql+pymysql://neutron:{{ openstack.admin_password }}@controller/n
 
 
 [keystone_authtoken]
-auth_uri = http://controller:9696
+auth_uri = http://controller:5000
 auth_url = http://controller:35357
 memcached_servers = controller:11211
 auth_type = password
