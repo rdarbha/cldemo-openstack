@@ -8,6 +8,12 @@
   with_items:
     - ubuntu-cloud-keyring
 
+- name: install packages
+  apt: pkg={{item}} state=present update_cache=yes
+  with_items:
+    - neutron-linuxbridge-agent
+    - python-openstackclient
+    #- neutron-l3-agent
 
 - name: neutron config files
   template: src={{item}}.j2 dest=/etc/neutron/{{item}}
