@@ -20,13 +20,13 @@
       - nova.conf
   notify: restart nova compute
 
+- name: flush handlers in case of changed config
+  meta: flush_handlers
+
 - name: start nova compute
   service: name={{ item }} state=started enabled=true
   with_items:
       - nova-compute
-
-- name: flush handlers in case of changed config
-  meta: flush_handlers
 
 - name: wait for nova to wake up
   pause: seconds=10

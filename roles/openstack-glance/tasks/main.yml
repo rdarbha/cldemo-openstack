@@ -34,14 +34,16 @@
 - name: glance dbsync
   shell: su -s /bin/sh -c "glance-manage db_sync" glance
 
+- name: flush handlers in case of changed config
+  meta: flush_handlers
+
+
 - name: start glance api
   service: name=glance-api state=started
 
 - name: start glance regisry
   service: name=glance-registry state=started
 
-- name: flush handlers in case of changed config
-  meta: flush_handlers
 
 - name: wait for glance to wake up
   pause: seconds=10

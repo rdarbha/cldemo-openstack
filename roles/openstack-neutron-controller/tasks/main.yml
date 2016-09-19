@@ -94,6 +94,11 @@
   shell: su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
 
 
+
+- name: flush handlers in case of changed config
+  meta: flush_handlers
+
+
 - name: start neutron
   service: name={{ item }} state=started enabled=true
   with_items:
@@ -102,9 +107,6 @@
       - neutron-dhcp-agent
       - neutron-metadata-agent
       #- neutron-l3-agent
-
-- name: flush handlers in case of changed config
-  meta: flush_handlers
 
 - name: wait for nova to wake up
   pause: seconds=10

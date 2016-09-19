@@ -49,6 +49,11 @@
 - name: nova dbsync
   shell: su -s /bin/sh -c "nova-manage db sync" nova
 
+
+- name: flush handlers in case of changed config
+  meta: flush_handlers
+
+
 - name: start nova
   service: name={{ item }} state=started enabled=true
   with_items:
@@ -57,9 +62,6 @@
       - nova-scheduler
       - nova-conductor
       - nova-novncproxy
-
-- name: flush handlers in case of changed config
-  meta: flush_handlers
 
 - name: wait for nova to wake up
   pause: seconds=10

@@ -35,11 +35,11 @@
 - name: configure fernet
   command: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 
-- name: start keystone
-  service: name=keystone state=started
-
 - name: flush handlers in case of changed config
   meta: flush_handlers
+
+- name: start keystone
+  service: name=keystone state=started
 
 - name: wait for keystone to wake up
   pause: seconds=10
