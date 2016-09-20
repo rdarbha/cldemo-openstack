@@ -6,8 +6,10 @@
     - memcached
     - python-memcache
 
-- name: configure memcached to run on all ips.
-  copy: src=memcached.conf dest=/etc/memcached.conf
+- name: memcached config files
+  template: src={{item}}.j2 dest=/etc/{{item}}
+  with_items:
+      - memcached.conf
   notify: restart memcached
 
 - name: flush handlers in case of changed config
