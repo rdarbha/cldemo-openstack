@@ -18,7 +18,7 @@
   template: src={{item}}.j2 dest=/etc/openstack-dashboard/{{item}}
   with_items:
       - local_settings.py
-  notify: restart horizon
+  notify: restart apache2
 
 - name: flush handlers in case of changed config
   meta: flush_handlers
