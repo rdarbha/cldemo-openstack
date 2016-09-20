@@ -135,7 +135,7 @@
 # interfaces to be used for flat and VLAN networks. All physical networks
 # listed in network_vlan_ranges on the server should have mappings to
 # appropriate interfaces on each agent. (list value)
-physical_interface_mappings = provider:{{ openstack.upstream_port[ansible_hostname] }}
+physical_interface_mappings = provider:{{ openstack.provider_iface[ansible_hostname] }}
 
 # List of <physical_network>:<physical_bridge> (list value)
 #bridge_mappings =
@@ -168,7 +168,7 @@ enable_security_group = true
 
 # Enable VXLAN on the agent. Can be enabled when agent is managed by ml2 plugin
 # using linuxbridge mechanism driver (boolean value)
-enable_vxlan = false
+enable_vxlan = true
 
 # TTL for vxlan interface protocol packets. (integer value)
 #ttl = <None>
@@ -185,11 +185,11 @@ enable_vxlan = false
 #vxlan_group = 224.0.0.1
 
 # Local IP address of the VXLAN endpoints. (IP address value)
-#local_ip = <None>
+local_ip = {{ openstack.vxlan_ip[ansible_hostname] }}
 
 # Extension to use alongside ml2 plugin's l2population mechanism driver. It
 # enables the plugin to populate VXLAN forwarding table. (boolean value)
-#l2_population = false
+l2_population = True
 
 # Enable local ARP responder which provides local responses instead of
 # performing ARP broadcast into the overlay. Enabling local ARP responder is

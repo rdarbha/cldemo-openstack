@@ -17,7 +17,7 @@
     - neutron-dhcp-agent
     - neutron-metadata-agent
     - python-openstackclient
-    #- neutron-l3-agent
+    - neutron-l3-agent
 
 # Install and configure Nova
 - name: create a table for neutron
@@ -106,7 +106,7 @@
       - neutron-linuxbridge-agent
       - neutron-dhcp-agent
       - neutron-metadata-agent
-      #- neutron-l3-agent
+      - neutron-l3-agent
 
 - name: wait for nova to wake up
   pause: seconds=10
