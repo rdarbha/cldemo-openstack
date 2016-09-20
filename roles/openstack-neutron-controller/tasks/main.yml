@@ -35,6 +35,7 @@
       - metadata_agent.ini
       - neutron.conf
       - dhcp_agent.ini
+      - l3_agent.ini
   notify: restart neutron
 
 - name: ml2 config files

@@ -26,5 +26,6 @@ Quickstart: Run the demo
     cat index.html
 
 
-Topology
---------
+Tips
+----
+Open the tunnel: ssh -L 6080:localhost:8888 cumulus@127.0.0.1 -p 2222 ssh -L 8888:controller:6080 server01
