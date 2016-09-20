@@ -31,6 +31,7 @@
     - openstack-glance
     - openstack-neutron-controller
     - openstack-nova-controller
+    - openstack-horizon
 - hosts: server02,server03,server04
   user: cumulus
   become: yes
