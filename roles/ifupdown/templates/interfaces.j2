@@ -14,6 +14,7 @@ auto {{ iface }}
 iface {{ iface }} inet static
     address {{ intvars['neighbors'][iface].ip }}
     netmask {{ intvars['neighbors'][iface].mask }}
+{% endfor %}
+
     up ip route add 10.0.0.0/8 via {{ intvars['neighbors'][iface].gateway }}
     up ip route add 172.16.0.0/16 via {{ intvars['neighbors'][iface].gateway }}
-{% endfor %}
