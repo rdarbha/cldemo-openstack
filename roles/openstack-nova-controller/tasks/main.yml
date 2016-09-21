@@ -112,17 +112,17 @@
   pause: seconds=10
 
 - name: collect flavors
-  command: openstack {{ openstack.args }} flavor list
+  command: openstack {{ openstack.admin_credentials }} flavor list
   register: _flavors
 
 - name: add m1.nano flavor
-  command: openstack {{openstack.args}} flavor create --id 0 --vcpus 1 --ram 64 --disk 1 m1.nano
+  command: openstack {{openstack.admin_credentials}} flavor create --id 0 --vcpus 1 --ram 64 --disk 1 m1.nano
   when: "'m1.nano' not in _flavors.stdout"
 
 - name: add icmp security rule
-  command: openstack {{openstack.args}} security group rule create --proto icmp default
+  command: openstack {{openstack.admin_credentials}} security group rule create --proto icmp default
   when: "'m1.nano' not in _flavors.stdout"
 
 - name: add ssh security rule
-  command: openstack {{openstack.args}} security group rule create --proto tcp --dst-port 22 default
+  command: openstack {{openstack.admin_credentials}} security group rule create --proto tcp --dst-port 22 default
   when: "'m1.nano' not in _flavors.stdout"
