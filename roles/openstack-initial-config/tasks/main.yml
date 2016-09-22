@@ -1,5 +1,10 @@
 
-# Install required packages
+- name: create environment scripts
+  template: src={{item}}.j2 dest=/home/cumulus/{{item}} mode=0777
+  with_items:
+      - admin-openrc
+      - demo-openrc
+
 - name: collect flavors
   command: openstack {{ openstack.admin_credentials }} flavor list
   register: _flavors
