@@ -29,6 +29,7 @@ Find the file named `Vagrantfile` and find the stanza for `server01`. Replace
     ssh server01
     . demo-openrc
     openstack server create --flavor m1.tiny --image cirros --nic net-id=provider --security-group default cirros01
+    ping 192.168.0.201 #wait until it starts responding
     ssh cirros@192.168.0.101
     # password is "cubswin:)"
     hostname
