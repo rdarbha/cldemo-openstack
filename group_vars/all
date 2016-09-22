@@ -99,11 +99,16 @@ openstack:
         server02: "172.16.2.101"
         server03: "172.16.3.101"
         server04: "172.16.4.101"
-    provider_iface:
-        server01: "eth0"
-        server02: "eth0"
-        server03: "eth0"
-        server04: "eth0"
+    provider_network:
+        iface:
+            server01: "eth0"
+            server02: "eth0"
+            server03: "eth0"
+            server04: "eth0"
+        cidr: "192.168.0.0/24"
+        start: "192.168.0.100"
+        end: "192.168.0.150"
+        gateway: "192.168.0.254"
     admin_token: "ac014aaa2beb079192be"
     admin_password: "CumulusLinux"
     demo_password: "demo"

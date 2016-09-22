@@ -34,9 +34,3 @@ Open the tunnel:
 
     ssh -L 6080:localhost:8888 cumulus@127.0.0.1 -p 2222 ssh -L 8888:controller:6080 server01
     ssh -L 8080:server01:80 cumulus@127.0.0.1 -p 2222
-
-    --os-project-domain-name default --os-user-domain-name default --os-project-name admin --os-username admin --os-password CumulusLinux --os-auth-url http://controller:35357/v3
-
-    neutron net-create --shared --provider:physical_network provider   --provider:network_type flat provider
-    neutron net-update provider --router:external
-    neutron subnet-create --name provider --allocation-pool start=192.168.0.200,end=192.168.0.230 --dns-nameserver 8.8.4.4 --gateway 192.168.0.254 provider 192.168.0.0/24
