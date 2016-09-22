@@ -55,6 +55,20 @@ Create a private tenant network and launch a VM in it. Give it a floating IP add
     ping google.com
     exit
 
+Access the horizon dashboard. In a new terminal, run the following command:
+
+    ssh -L 8080:server01:80 cumulus@127.0.0.1 -p 2222
+
+The password is `CumulusLinux!`. Leave that terminal open - this will create a
+tunnel so that you can access the horizon dashboard. Open
+http://localhost:8080/horizon in your browser. Log in with the demo user
+(password is `demo`) and the default domain. You should be able to see the two
+instances created in the last two steps. Unfortunately, due to the way that the
+Vagrant topology is set up, you will not be able to access the VNC console
+normally.
+
+
+
 Tips
 ----
 Open the tunnel:
