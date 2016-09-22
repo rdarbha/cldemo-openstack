@@ -28,11 +28,32 @@ Find the file named `Vagrantfile` and find the stanza for `server01`. Replace
     ansible-playbook run-demo.yml
     ssh server01
     . demo-openrc
-    openstack server create --flavor m1.tiny --image cirros --nic net-id=provider --security-group default cirros01
-    ping 192.168.0.201 #wait until it starts responding
+
+Launch a single VM instance on the shared provider network.
+
+    openstack server create --flavor m1.nano --image cirros --nic net-id=provider --security-group default cirros01
+    ping 192.168.0.101 #wait until it starts responding
     ssh cirros@192.168.0.101
     # password is "cubswin:)"
     hostname
+    ping google.com
+    exit
+
+Create a private tenant network and launch a VM in it. Give it a floating IP address.
+
+    neutron net-create demonet
+    neutron subnet-create --name demonet --dns-nameserver 8.8.8.8 --gateway 200.0.0.1 demonet 200.0.0.0/24
+    neutron router-create demorouter
+    neutron router-interface-add demorouter demonet
+    neutron router-gateway-set demorouter provider
+    openstack server create --flavor m1.nano --image cirros --nic net-id=demonet --security-group default cirros02
+    openstack ip floating create provider
+    openstack ip floating add FLOATING_IP_FROM_LAST COMMAND cirros02
+    ping FLOATING_IP_FROM_LAST COMMAND
+    ssh cirros@FLOATING_IP_FROM_LAST COMMAND
+    hostname
+    ping google.com
+    exit
 
 Tips
 ----
