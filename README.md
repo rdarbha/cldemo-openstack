@@ -55,23 +55,15 @@ Create a private tenant network and launch a VM in it. Give it a floating IP add
     ping google.com
     exit
 
-Access the horizon dashboard. In a new terminal, run the following command:
+To access the horizon terminal, open two new terminals and run one of the
+following commands in each. When prompted for a password, enter `CumulusLinux!`.
 
     ssh -L 8080:server01:80 cumulus@127.0.0.1 -p 2222
-
-The password is `CumulusLinux!`. Leave that terminal open - this will create a
-tunnel so that you can access the horizon dashboard. Open
-http://localhost:8080/horizon in your browser. Log in with the demo user
-(password is `demo`) and the default domain. You should be able to see the two
-instances created in the last two steps. Unfortunately, due to the way that the
-Vagrant topology is set up, you will not be able to access the VNC console
-normally.
-
-
-
-Tips
-----
-Open the tunnel:
-
     ssh -L 6080:localhost:8888 cumulus@127.0.0.1 -p 2222 ssh -L 8888:controller:6080 server01
-    ssh -L 8080:server01:80 cumulus@127.0.0.1 -p 2222
+
+Leave these terminals open - they will create tunnels that will allow you to
+access the Horizon dashboard and the noVNC console clients using your web
+browser. Navigate to  http://localhost:8080/horizon in your web browser.
+Log in with the demo user (password is `demo`) and the default domain. You
+should be able to see the last two steps. Open one of them and go to the "console"
+tab. You should be able to access the serial console from this web page.
