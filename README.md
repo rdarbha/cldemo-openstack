@@ -1,6 +1,6 @@
 Openstack Demo
 ==============
-This demo is an ansible playbook that installs Openstack Juno on the reference topology.
+This demo is an ansible playbook that installs Openstack Mitaka on the reference topology.
 
 This demo is written for the [cldemo-vagrant](https://github.com/cumulusnetworks/cldemo-vagrant) reference topology and applies the reference BGP unnumbered configuration from [cldemo-config-routing](https://github.com/cumulusnetworks/cldemo-config-routing).
 
