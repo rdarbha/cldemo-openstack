@@ -1,6 +1,8 @@
 Openstack Demo
 ==============
-This demo is an ansible playbook that installs Openstack Mitaka on the reference topology.
+This demo is an ansible playbook that installs Openstack Mitaka on the Cumulus Networks reference topology.
+
+The networking topology for this demo is entirely layer 3 with static VXLAN tunnels. Routing On The Host (Quagga) is not utilized on the OpenStack compute nodes for demonstration simiplicity.
 
 This demo is written for the [cldemo-vagrant](https://github.com/cumulusnetworks/cldemo-vagrant) reference topology and applies the reference BGP unnumbered configuration from [cldemo-config-routing](https://github.com/cumulusnetworks/cldemo-config-routing).
 
