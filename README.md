@@ -26,11 +26,12 @@ Find the file named `Vagrantfile` and find the stanza for `server01`. Replace
     git clone https://github.com/cumulusnetworks/cldemo-openstack
     cd cldemo-openstack
     ansible-playbook run-demo.yml
-    ssh server01
-    . demo-openrc
+
 
 Launch a single VM instance on the shared provider network.
 
+    ssh server01
+    . demo-openrc
     openstack server create --flavor m1.nano --image cirros --nic net-id=provider --security-group default cirros01
     ping 192.168.0.101 #wait until it starts responding
     ssh cirros@192.168.0.101

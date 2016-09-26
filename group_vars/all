@@ -1,57 +1,45 @@
-networks:
-    "172.16.1.0/24":
-        source: "leaf01"
-    "172.16.2.0/24":
-        source: "leaf02"
-    "172.16.3.0/24":
-        source: "leaf03"
-    "172.16.4.0/24":
-        source: "leaf04"
+# networking
 interfaces:
     leaf01:
         loopback: "10.0.0.11"
         asn: 65011
-        networks:
-            br0:
-                ip: "172.16.1.1/24"
-                ports: ["swp1"]
         neighbors:
+            swp1:
+            swp2:
+        fabric:
             swp51:
             swp52:
     leaf02:
         loopback: "10.0.0.12"
         asn: 65012
-        networks:
-            br0:
-                ip: "172.16.2.1/24"
-                ports: ["swp2"]
         neighbors:
+            swp1:
+            swp2:
+        fabric:
             swp51:
             swp52:
     leaf03:
         loopback: "10.0.0.13"
         asn: 65013
-        networks:
-            br0:
-                ip: "172.16.3.1/24"
-                ports: ["swp1"]
         neighbors:
+            swp1:
+            swp2:
+        fabric:
             swp51:
             swp52:
     leaf04:
         loopback: "10.0.0.14"
         asn: 65014
-        networks:
-            br0:
-                ip: "172.16.4.1/24"
-                ports: ["swp2"]
         neighbors:
+            swp1:
+            swp2:
+        fabric:
             swp51:
             swp52:
     spine01:
         loopback: "10.0.0.21"
         asn: 65020
-        neighbors:
+        fabric:
             swp1:
             swp2:
             swp3:
@@ -59,46 +47,58 @@ interfaces:
     spine02:
         loopback: "10.0.0.22"
         asn: 65020
-        neighbors:
+        fabric:
             swp1:
             swp2:
             swp3:
             swp4:
     server01:
+        loopback:
+            ip: "10.0.0.31"
+            mask: "255.255.255.255"
+            vxlan: eth1
+        asn: 65101
         neighbors:
             eth1:
-                ip: "172.16.1.101"
-                mask: "255.255.255.0"
-                gateway: "172.16.1.1"
+            eth2:
     server02:
-        neighbors:
-            eth2:
-                ip: "172.16.2.101"
-                mask: "255.255.255.0"
-                gateway: "172.16.2.1"
-    server03:
+        loopback:
+            ip: "10.0.0.32"
+            mask: "255.255.255.255"
+            vxlan: eth2
+        asn: 65102
         neighbors:
             eth1:
-                ip: "172.16.3.101"
-                mask: "255.255.255.0"
-                gateway: "172.16.3.1"
-    server04:
-        neighbors:
             eth2:
-                ip: "172.16.4.101"
-                mask: "255.255.255.0"
-                gateway: "172.16.4.1"
+    server03:
+        loopback:
+            ip: "10.0.0.33"
+            mask: "255.255.255.255"
+            vxlan: eth1
+        asn: 65103
+        neighbors:
+            eth1:
+            eth2:
+    server04:
+        loopback:
+            ip: "10.0.0.34"
+            mask: "255.255.255.255"
+            vxlan: eth2
+        asn: 65104
+        neighbors:
+            eth1:
+            eth2:
 openstack:
     ip:
-        server01: "172.16.1.101"
-        server02: "172.16.2.101"
-        server03: "172.16.3.101"
-        server04: "172.16.4.101"
+        server01: "10.0.0.31"
+        server02: "10.0.0.32"
+        server03: "10.0.0.33"
+        server04: "10.0.0.34"
     vxlan_ip:
-        server01: "172.16.1.101"
-        server02: "172.16.2.101"
-        server03: "172.16.3.101"
-        server04: "172.16.4.101"
+        server01: "10.0.0.31"
+        server02: "10.0.0.32"
+        server03: "10.0.0.33"
+        server04: "10.0.0.34"
     provider_network:
         iface:
             server01: "eth0"

@@ -1,12 +1,13 @@
 127.0.0.1	localhost
-127.0.1.1 server01 server01
+127.0.1.1 {{ ansible_hostname}} {{ ansible_hostname }}
 
 # The following lines are desirable for IPv6 capable hosts
 ::1     localhost ip6-localhost ip6-loopback
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 
-172.16.1.101  controller controller
-172.16.2.101  compute01 compute01
-172.16.3.101  compute02 compute02
-172.16.4.101  compute03 compute03
+
+10.0.0.31 controller
+10.0.0.32 compute01
+10.0.0.33 compute02
+10.0.0.34 compute03
