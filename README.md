@@ -1,10 +1,9 @@
-OpenStack Demo
+Openstack Demo
 ==============
-This demo is an ansible playbook that installs upstream OpenStack Mitaka on the Cumulus Networks reference topology.
+This demo is an ansible playbook that installs Openstack Mitaka on the reference topology.
 
-The networking topology for this demo is entirely layer 3 with static VXLAN tunnels.
-
-This demo is written for the [cldemo-vagrant](https://github.com/cumulusnetworks/cldemo-vagrant) reference topology and applies the reference BGP unnumbered configuration from [cldemo-config-routing](https://github.com/cumulusnetworks/cldemo-config-routing).
+This demo is written for the [cldemo-vagrant](https://github.com/cumulusnetworks/cldemo-vagrant) reference topology and utilizes
+[Routing on the Host](https://github.com/cumulusnetworks/cldemo-roh-ansible) to advertise the local VXLAN termination points.
 
 
 Quickstart: Run the demo
@@ -51,12 +50,14 @@ Create a private tenant network and launch a VM in it. Give it a floating IP add
     neutron router-gateway-set demorouter provider
     openstack server create --flavor m1.nano --image cirros --nic net-id=demonet --security-group default cirros02
     openstack ip floating create provider
-    openstack ip floating add FLOATING_IP_FROM_LAST COMMAND cirros02
-    ping FLOATING_IP_FROM_LAST COMMAND
-    ssh cirros@FLOATING_IP_FROM_LAST COMMAND
+    # 192.168.0.103 is assumed to be the floating IP from the last command
+    openstack ip floating add 192.168.0.103 cirros02
+    ping 192.168.0.103
+    ssh cirros@192.168.0.103
     hostname
     ping google.com
     exit
+
 
 To access the horizon terminal, open two new terminals and run one of the
 following commands in each. When prompted for a password, enter `CumulusLinux!`.

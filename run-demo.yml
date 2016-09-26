@@ -19,6 +19,7 @@
   become_method: sudo
   roles:
     - ifupdown
+    - quagga-roh
 - hosts: server01
   user: cumulus
   become: yes
