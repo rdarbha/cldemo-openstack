@@ -29,10 +29,10 @@
   command: ifdown {{item}}
   with_items:
     - lo
-    - {{ interfaces[ansible_hostname].loopback.vxlan }}
+    - "{{ interfaces[ansible_hostname].loopback.vxlan }}"
 
 - name: Force Interfaces Up
   command: ifup {{item}}
   with_items:
     - lo
-    - {{ interfaces[ansible_hostname].loopback.vxlan }}
+    - "{{ interfaces[ansible_hostname].loopback.vxlan }}"
