@@ -8,12 +8,12 @@ iface lo inet loopback
 
 auto lo:0
 iface lo:0 inet static
-    address {{ intvars.loopback.ip }}/32
+    address {{ intvars.loopback }}/32
 
 {% for neighbor in intvars.neighbors %}
 auto {{ neighbor }}
 iface {{ neighbor }} inet static
-    address {{ intvars.loopback.ip }}/32
+    address {{ intvars.loopback }}/32
 {% endfor %}
 
 
