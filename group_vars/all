@@ -60,6 +60,7 @@ interfaces:
         asn: 65101
         neighbors:
             eth1:
+            eth2:
     server02:
         loopback:
             ip: "10.0.0.32"
@@ -67,6 +68,7 @@ interfaces:
             vxlan: eth2
         asn: 65102
         neighbors:
+            eth1:
             eth2:
     server03:
         loopback:
@@ -76,6 +78,7 @@ interfaces:
         asn: 65103
         neighbors:
             eth1:
+            eth2:
     server04:
         loopback:
             ip: "10.0.0.34"
@@ -83,6 +86,7 @@ interfaces:
             vxlan: eth2
         asn: 65104
         neighbors:
+            eth1:
             eth2:
 openstack:
     ip:
