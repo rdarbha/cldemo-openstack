@@ -6,10 +6,16 @@
 auto lo
 iface lo inet loopback
 
-auto {{ intvars['loopback'].vxlan }}
-iface {{ intvars['loopback'].vxlan }} inet static
-    address {{ intvars['loopback'].ip }}
-    netmask {{ intvars['loopback'].mask }}
+auto lo:0
+iface lo:0 inet static
+    address {{ intvars.loopback }}/32
+
+{% for neighbor in intvars.neighbors %}
+auto {{ neighbor }}
+iface {{ neighbor }} inet static
+    address {{ intvars.loopback }}/32
+{% endfor %}
+
 
 auto eth0
 iface eth0 inet dhcp
