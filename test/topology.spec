@@ -1,11 +1,11 @@
   
 vm oob-mgmt-server ubuntu-16.04 2 4 10 
-vm leaf01 cumulus-vx-3.2.1 1 2 10 
-vm leaf02 cumulus-vx-3.2.1 1 2 10 
-vm leaf03 cumulus-vx-3.2.1 1 2 10 
-vm leaf04 cumulus-vx-3.2.1 1 2 10 
-vm spine01 cumulus-vx-3.2.1 1 2 10 
-vm spine02 cumulus-vx-3.2.1 1 2 10 
+vm leaf01 cumulus-vx-3.3.0 1 2 10 
+vm leaf02 cumulus-vx-3.3.0 1 2 10 
+vm leaf03 cumulus-vx-3.3.0 1 2 10 
+vm leaf04 cumulus-vx-3.3.0 1 2 10 
+vm spine01 cumulus-vx-3.3.0 1 2 10 
+vm spine02 cumulus-vx-3.3.0 1 2 10 
 vm server01 ubuntu-16.04 2 4 10 
 vm server02 ubuntu-16.04 2 4 10 
 vm server03 ubuntu-16.04 2 4 10 
