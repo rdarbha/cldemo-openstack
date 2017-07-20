@@ -19,11 +19,6 @@ Find the file named `Vagrantfile` and find the stanza for `server01`. Replace
 
     vagrant up oob-mgmt-server oob-mgmt-switch leaf01 leaf02 spine01 spine02 server01 server02 leaf03 leaf04 server03 server04
     vagrant ssh oob-mgmt-server
-    sudo su - cumulus
-    sudo apt-get install software-properties-common -y
-    sudo apt-add-repository ppa:ansible/ansible -y
-    sudo apt-get update
-    sudo apt-get install ansible -qy
     git clone https://github.com/cumulusnetworks/cldemo-openstack
     cd cldemo-openstack
     ansible-playbook run-demo.yml
