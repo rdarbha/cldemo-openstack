@@ -54,6 +54,8 @@ interfaces:
             swp4:
     server01:
         loopback: "10.0.0.31"
+        loopback1: "10.0.1.31"
+        loopback2: "10.0.2.31"
         asn: 65101
         neighbors:
             eth1:
