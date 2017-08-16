@@ -11,6 +11,12 @@ interface eth2
 router bgp {{ intvars.asn }}
   bgp router-id {{ intvars.loopback }}
   network {{ intvars.loopback }}/32
+  {% if intvars.loopback1 is defined %}
+  network {{ intvars.loopback1 }}/32
+  {% endif %}
+  {% if intvars.loopback1 is defined %}
+  network {{ intvars.loopback2 }}/32
+  {% endif %}
   maximum-paths 64
   bgp default show-hostname
   bgp bestpath as-path multipath-relax
