@@ -10,14 +10,16 @@ auto lo:0
 iface lo:0 inet static
     address {{ intvars.loopback }}/32
 
+{% if intvars.loopback1 is defined %}
 auto lo:1
 iface lo:1 inet static
     address {{ intvars.loopback1 }}/32
-
+{% endif %}
+{% if intvars.loopback1 is defined %}
 auto lo:2
 iface lo:2 inet static
     address {{ intvars.loopback2 }}/32
-
+{% endif %}
 
 {% for neighbor in intvars.neighbors %}
 auto {{ neighbor }}
