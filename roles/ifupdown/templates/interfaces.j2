@@ -24,7 +24,7 @@ iface lo:2 inet static
 {% for neighbor in intvars.neighbors %}
 auto {{ neighbor }}
 iface {{ neighbor }} inet static
-    address {{ intvars.loopback }}/32
+    address {{ intvars.loopback0 }}/32
 {% endfor %}
 
 
