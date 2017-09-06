@@ -78,31 +78,31 @@
   command: openstack {{openstack.args}} service create --name neutron --description "Openstack Network" network
   when: "'neutron' not in _services.stdout"
 
-- name: add neutron endpoints
-  command: openstack {{openstack.args}} endpoint create --region RegionOne network {{item.a}} http://controller:{{ item.b }}
-  with_items:
-      - {a: "public", b: 9696}
-      - {a: "internal", b: 9696}
-      - {a: "admin", b: 9696}
-  when: "'neutron' not in _services.stdout"
-
 # - name: add neutron endpoints
 #   command: openstack {{openstack.args}} endpoint create --region RegionOne network {{item.a}} http://controller:{{ item.b }}
 #   with_items:
 #       - {a: "public", b: 9696}
-#   when: "'neutron' not in _services.stdout"
-
-# - name: add neutron endpoints
-#   command: openstack {{openstack.args}} endpoint create --region RegionOne network {{item.a}} http://controller1:{{ item.b }}
-#   with_items:
 #       - {a: "internal", b: 9696}
-#   when: "'neutron' not in _services.stdout"
-
-# - name: add neutron endpoints
-#   command: openstack {{openstack.args}} endpoint create --region RegionOne network {{item.a}} http://controller2:{{ item.b }}
-#   with_items:
 #       - {a: "admin", b: 9696}
 #   when: "'neutron' not in _services.stdout"
+
+- name: add neutron endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne network {{item.a}} http://controller:{{ item.b }}
+  with_items:
+      - {a: "public", b: 9696}
+  when: "'neutron' not in _services.stdout"
+
+- name: add neutron endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne network {{item.a}} http://controller1:{{ item.b }}
+  with_items:
+      - {a: "internal", b: 9696}
+  when: "'neutron' not in _services.stdout"
+
+- name: add neutron endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne network {{item.a}} http://controller2:{{ item.b }}
+  with_items:
+      - {a: "admin", b: 9696}
+  when: "'neutron' not in _services.stdout"
 
 - name: wait for neutron to wake up
   pause: seconds=10

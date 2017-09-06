@@ -100,31 +100,31 @@
   command: openstack {{openstack.args}} service create --name nova --description "Openstack Compute" compute
   when: "'nova' not in _services.stdout"
 
-- name: add nova endpoints
-  command: openstack {{openstack.args}} endpoint create --region RegionOne compute {{item.a}} http://controller:{{ item.b }}/v2.1/%\(tenant_id\)s
-  with_items:
-      - {a: "public", b: 8774}
-      - {a: "internal", b: 8774}
-      - {a: "admin", b: 8774}
-  when: "'nova' not in _services.stdout"
-
 # - name: add nova endpoints
 #   command: openstack {{openstack.args}} endpoint create --region RegionOne compute {{item.a}} http://controller:{{ item.b }}/v2.1/%\(tenant_id\)s
 #   with_items:
 #       - {a: "public", b: 8774}
-#   when: "'nova' not in _services.stdout"
-
-# - name: add nova endpoints
-#   command: openstack {{openstack.args}} endpoint create --region RegionOne compute {{item.a}} http://controller1:{{ item.b }}/v2.1/%\(tenant_id\)s
-#   with_items:
 #       - {a: "internal", b: 8774}
-#   when: "'nova' not in _services.stdout"
-
-# - name: add nova endpoints
-#   command: openstack {{openstack.args}} endpoint create --region RegionOne compute {{item.a}} http://controller2:{{ item.b }}/v2.1/%\(tenant_id\)s
-#   with_items:
 #       - {a: "admin", b: 8774}
 #   when: "'nova' not in _services.stdout"
+
+- name: add nova endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne compute {{item.a}} http://controller:{{ item.b }}/v2.1/%\(tenant_id\)s
+  with_items:
+      - {a: "public", b: 8774}
+  when: "'nova' not in _services.stdout"
+
+- name: add nova endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne compute {{item.a}} http://controller1:{{ item.b }}/v2.1/%\(tenant_id\)s
+  with_items:
+      - {a: "internal", b: 8774}
+  when: "'nova' not in _services.stdout"
+
+- name: add nova endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne compute {{item.a}} http://controller2:{{ item.b }}/v2.1/%\(tenant_id\)s
+  with_items:
+      - {a: "admin", b: 8774}
+  when: "'nova' not in _services.stdout"
 
 - name: wait for nova to wake up
   pause: seconds=10
