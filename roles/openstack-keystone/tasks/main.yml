@@ -74,31 +74,31 @@
   command: openstack {{openstack.args}} service create --name keystone --description "Openstack Identity" identity
   when: "'keystone' not in _services.stdout"
 
-- name: add keystone endpoints
-  command: openstack {{openstack.args}} endpoint create --region RegionOne identity {{item.a}} http://controller:{{ item.b }}/v3
-  with_items:
-      - {a: "public", b: 5000}
-      - {a: "internal", b: 5000}
-      - {a: "admin", b: 35357}
-  when: "'keystone' not in _services.stdout"
-
 # - name: add keystone endpoints
 #   command: openstack {{openstack.args}} endpoint create --region RegionOne identity {{item.a}} http://controller:{{ item.b }}/v3
 #   with_items:
 #       - {a: "public", b: 5000}
-#   when: "'keystone' not in _services.stdout"
-
-# - name: add keystone endpoints
-#   command: openstack {{openstack.args}} endpoint create --region RegionOne identity {{item.a}} http://controller1:{{ item.b }}/v3
-#   with_items:
 #       - {a: "internal", b: 5000}
-#   when: "'keystone' not in _services.stdout"
-
-# - name: add keystone endpoints
-#   command: openstack {{openstack.args}} endpoint create --region RegionOne identity {{item.a}} http://controller2:{{ item.b }}/v3
-#   with_items:
 #       - {a: "admin", b: 35357}
 #   when: "'keystone' not in _services.stdout"
+
+- name: add keystone endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne identity {{item.a}} http://controller:{{ item.b }}/v3
+  with_items:
+      - {a: "public", b: 5000}
+  when: "'keystone' not in _services.stdout"
+
+- name: add keystone endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne identity {{item.a}} http://controller1:{{ item.b }}/v3
+  with_items:
+      - {a: "internal", b: 5000}
+  when: "'keystone' not in _services.stdout"
+
+- name: add keystone endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne identity {{item.a}} http://controller2:{{ item.b }}/v3
+  with_items:
+      - {a: "admin", b: 35357}
+  when: "'keystone' not in _services.stdout"
 
 # Add a bunch of users
 
