@@ -81,31 +81,31 @@
   command: openstack {{openstack.args}} service create --name glance --description "Openstack Image" image
   when: "'glance' not in _services.stdout"
 
-- name: add glance endpoints
-  command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller:{{ item.b }}
-  with_items:
-      - {a: "public", b: 9292}
-      - {a: "internal", b: 9292}
-      - {a: "admin", b: 9292}
-  when: "'glance' not in _services.stdout"
-
 # - name: add glance endpoints
 #   command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller:{{ item.b }}
 #   with_items:
 #       - {a: "public", b: 9292}
-#   when: "'glance' not in _services.stdout"
-
-# - name: add glance endpoints
-#   command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller1:{{ item.b }}
-#   with_items:
 #       - {a: "internal", b: 9292}
-#   when: "'glance' not in _services.stdout"
-
-# - name: add glance endpoints
-#   command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller2:{{ item.b }}
-#   with_items:
 #       - {a: "admin", b: 9292}
 #   when: "'glance' not in _services.stdout"
+
+- name: add glance endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller:{{ item.b }}
+  with_items:
+      - {a: "public", b: 9292}
+  when: "'glance' not in _services.stdout"
+
+- name: add glance endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller1:{{ item.b }}
+  with_items:
+      - {a: "internal", b: 9292}
+  when: "'glance' not in _services.stdout"
+
+- name: add glance endpoints
+  command: openstack {{openstack.args}} endpoint create --region RegionOne image {{item.a}} http://controller2:{{ item.b }}
+  with_items:
+      - {a: "admin", b: 9292}
+  when: "'glance' not in _services.stdout"
 
 - name: wait for glance to wake up
   pause: seconds=10
